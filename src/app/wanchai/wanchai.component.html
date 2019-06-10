@@ -1,0 +1,280 @@
+<div class="page">
+  <!-- Image and text -->
+
+  <nav class="navbar navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">
+      <img
+        src="../../assets/CPU.png"
+        width="40"
+        height="40"
+        class="d-inline-block align-top"
+        alt=""
+      /><b> &nbsp;Operating System</b>
+    </a>
+  </nav>
+  <br />
+  <table>
+    <tr>
+      <th>
+        <table style="max-height: 40vh;overflow-y: auto;">
+          <tr>
+            <th>
+              <div>
+                <div class="card">
+                  <div class="card-header ">
+                    <b>Process Control</b>
+                    <br>
+                    <div>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        (click)="addProcess()"
+                      >
+                        <i class="fa fa-plus-square" aria-hidden="true"></i>
+
+                        Add process</button
+                      >&nbsp;&nbsp;&nbsp;
+                      <button
+                        type="button"
+                        class="btn btn-warning"
+                        (click)="clear()"
+                      >
+                        Clear Process
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div
+                    class="card-body"
+                    style="max-height: 40vh;overflow-y: auto;"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-outline-success"
+                      OnClick="this.disabled=true"
+                      (click)="start()"
+                    >
+                      Start
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time Process :
+                    {{ this.time }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Average WaittingTime : {{ averageWaittingtime | number:'1.0-2'}}
+                    <br />
+                    <br />
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr align="center">
+                          <th scope="col">Process</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Arrival Time</th>
+                          <th scope="col">Execue Time</th>
+                          <th scope="col">Waitting Time</th>
+                          <th scope="col">I/O Time</th>
+                          <th scope="col">Terminate</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr align="center" *ngFor="let x of pcb.getPCB">
+                          <th scope="col">{{ x.process_Id }}</th>
+                          <th scope="col">{{ x.status }}</th>
+                          <th scope="col">{{ x.arrival_Time }}</th>
+                          <th scope="col">{{ x.execue_Time }}</th>
+                          <th scope="col">{{ x.waitting_time}}</th>
+                          <th scope="col">{{ x.io_Time }}</th>
+                          <th scope="col">
+                            <button
+                              type="button"
+                              class="btn  btn-outline-danger"
+                              (click)="setTerminate(x.process_Id)"[disabled]="x.status != 'Running'"
+                              [hidden]="x.status == 'Terminate'"
+                            >
+                              Terminate
+                            </button>
+                          </th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </th>
+          </tr>
+        </table>
+      </th>
+      <th>
+        <table
+          class="table table-bordered"
+          style="width: 350%;margin-left:1% auto;"
+        >
+          <tr border="1">
+            <th>
+              <div class="card">
+                  <div class="card-header ">
+                      <b>Job Queue</b>
+                <div
+                  class="card-body"
+                  style="max-height: 40vh;overflow-y: auto;"
+                >
+
+                  <table class="table">
+                    <thead>
+                      <tr align="center" *ngFor="let x of pcb.getPCB">
+                        <th scope="col">{{ x.process_Id }}</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+              </div>
+            </th>
+          </tr>
+        </table>
+      </th>
+    </tr>
+  </table>
+
+  <br />
+
+  <div class="row">
+    <div class="col-md mb-3">
+      <div class="card">
+        <div class="card-header ">
+          <b>Ready Queue</b>
+        </div>
+        <div class="card-body"  style="max-height: 40vh;overflow-y: auto;">
+          <div class="row">
+            <div class="col-md">
+              <div class="card">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Q1 Quantum Time = 5</th>
+                      <th scope="col">Q2 Quantum Time = 5</th>
+                      <th scope="col">FCFS Quantum Time = 10</th>
+                    </tr>
+                  </thead>
+                  <tr align="center" *ngFor="let x of pcb.getPCB">
+                    <th scope="col">{{ x.process_Id }}</th>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card">
+        <div class="card-header ">
+          <b>I/O Queue</b>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md">
+              <table
+                class="table table-hover table-bordered table-sm text-center"
+              >
+                <thead>
+                  <tr>
+                    <th colspan="2">CD-ROM</th>
+                  </tr>
+                  <tr>
+                    <td>
+                      ID
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        [disabled]="!Numprocess"
+                        (click)="AddIO(Numprocess, 'CD')"
+                      >
+                        Add
+                      </button>
+                    </td>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+                <tbody *ngFor="let x of cdr; let i = index">
+                  <tr *ngIf="x != null">
+                    <td>
+                      {{ x.process_Id }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md">
+              <table
+                class="table table-hover table-bordered table-sm text-center"
+              >
+                <thead>
+                  <tr>
+                    <th colspan="2">Disk</th>
+                  </tr>
+                  <tr>
+                    <td>
+                      ID
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        [disabled]="!Numprocess"
+                        (click)="AddIO(Numprocess, 'DISK')"
+                      >
+                        Add
+                      </button>
+                    </td>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+                <tbody *ngFor="let x of disk; let i = index">
+                  <tr *ngIf="x != null">
+                    <td>
+                      {{ x.process_Id }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <table
+              class="table table-hover table-bordered table-sm text-center"
+            >
+              <thead>
+                <tr>
+                  <th colspan="2">Printer</th>
+                </tr>
+                <tr>
+                  <td>
+                    ID
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      [disabled]="!Numprocess"
+                      (click)="AddIO(Numprocess, 'PRINTER')"
+                    >
+                      Add
+                    </button>
+                  </td>
+                </tr>
+              </thead>
+              <tbody></tbody>
+              <tbody *ngFor="let x of printer; let i = index">
+                <tr *ngIf="x != null">
+                  <td>
+                    {{ x.process_Id }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
